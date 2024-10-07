@@ -1,30 +1,20 @@
 const dotenv = require('dotenv')
 const http = require('http')
-
-dotenv.config()
+const EventEmitter = require('events')
 const PORT = process.env.PORT || 5000
+const Router = require('./router')
+const emitter = new EventEmitter
+const Application = require('./router/App')
+dotenv.config()
 
-class Router {
-    constructor(){
-        this.endpoint = {}
-    }
-    request(method = "GET" , path , handler){
-        
-    }
-}
-
-
-const server = http.createServer((req, res)=>{
-    const data = {
-        description: "Z",
-        evvv:"data",
-    }
-    res.writeHead(200, {
-        'Content-type': 'application/json'
-    })
-    
-    res.end(JSON.stringify(data))
-    
+const app = new Application()
+const router = new Router()
+router.get('/users', (req, res) =>{
+    res.end('you send /users')
 })
-
-server.listen(PORT, () => console.log(`server start ${PORT}`))
+router.post('/posts', (req, res) =>{
+    res.end('you send /posts')
+})
+//1'34
+app.addRouter(router)
+app.listen(PORT, () => console.log(router))
